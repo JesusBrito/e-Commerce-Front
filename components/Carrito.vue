@@ -47,9 +47,11 @@
 				<div class="card">
 				  <header class="card-header">
 				    <p class="card-header-title">
-				      Resumen de pedido
+				      Resumen de pedido 
 				    </p>
-			
+				    <p>
+				    	<countdown :date="date"></countdown>
+				    </p>
 				  </header>
 				  <div class="card-content">
 				    <div class="content">
@@ -82,7 +84,15 @@
 					<div class="columns">
 						<div class="column"></div>
 						<div class="column">
-							<button class="button is-rounded finish" id="btnFinalizar" @click='saveSale'>Finalizar compra</button>
+							<div v-if='valPago'> 
+								<PayPal
+    								:amount="Total"
+    								currency="MXN"
+    								:client="paypal"
+    								@payment-completed="saveSale"
+    								env="sandbox">
+  								</PayPal>
+  							</div>
 						</div>
 						<div class="column"></div>					
 					</div>	
@@ -100,8 +110,13 @@ import Datepicker from 'vue-bulma-datepicker'
 import jsPDF from 'jspdf'
 import jsPDFa from 'jspdf-autotable'
 import toastr from 'toastr';
-
+import PayPal from 'vue-paypal-checkout'
+import Vue from 'vue'
+import Countdown from './Countdown.vue';
+Vue.use(PayPal)
 export default{
+	components:{PayPal,Countdown},
+	props:['amount'],
 	data(){
 		return{
 			Car:'',
@@ -111,7 +126,12 @@ export default{
 			Total:'',
 			Costo:'',
 			saleToSend:{},
-			noVenta:''
+			noVenta:'',
+			paypal: {
+      		sandbox: 'ATk7GR9gFJL5TgPQgUBPgtgsH8wg3XBXw_Fhivnzk1ShN-coPqt5x_Yyo3zuXGok5rbHgl0ECx0x1Bix',
+    		},
+    		valPago:false,
+    		date:'August 22'
 		}
 	},
 	created: function(){
@@ -131,34 +151,12 @@ export default{
 			alert('Aún no inicias sesión')
 			router.replace('login')
 		}
-		//this.valEstado()
+		this.validaCarrito()
+		
+		var calcDate= newDate() 
+		this.date = calcDate.setMinutes(calcDate.getMinutes()+5)
+		alert(this.date)
 	},
-    computed : {
-	    subTotal: function() {
-	      	let sum = 0
-	      	var subtotal= this.Car.reduce((sum, item) => sum + parseFloat(item.Subtotal), 0)
-	      	this.Subtotal= subtotal.toFixed(2)
-	      	return subtotal
-	    },
-	  	iva: function() {
-	  		var iva=0
-	  		iva = this.Subtotal*.16
-	  		this.Iva= iva.toFixed(2)
-	      	return this.Iva	
-	    },
-	  	costo: function() {
-	  		var costo=0
-	  		costo= this.Subtotal*.20
-	  		this.Costo=costo.toFixed(2)
-	      	return this.Costo
-	    },
-	  	total: function() {
-	  		var total=0
-	  		total= (this.Subtotal*1.16)+ parseFloat(this.Costo)
-	  		this.Total=total.toFixed(2)
-	      	return this.Total
-	    }
-  	},
 	methods:{
 		generatePdf(){
 			var doc = new jsPDF({
@@ -193,7 +191,6 @@ export default{
 
 				margin: {top: 150},
 				addPageContent: function(data) {
-					console.log(res.columns)
 				   	doc.setFontSize(20);
 				   	doc.text(titulo,40, 30);
 				   	//doc.text('Venta',40, 40);
@@ -215,9 +212,7 @@ export default{
 			        this.Car.forEach((elemento, indice, array)=>{
 
 	    				if((elemento.ProductoIdProd==Product.ProductoIdProd)&&(elemento.ColoreIdColor==Product.ColoreIdColor)){
-	    					console.log(indice)
 	    					this.Car.splice(indice, indice+1)
-	    					console.log(this.Car)
 	    					if(this.Car.length<1){
 	    						localStorage.removeItem('carStorage')
 	    					}else{
@@ -229,9 +224,7 @@ export default{
 			}else{
 				this.Car.forEach((elemento, indice, array)=>{
 	    				if((elemento.ProductoIdProd==Product.ProductoIdProd)&&(elemento.ColoreIdColor==Product.ColoreIdColor)){
-	    					console.log(indice)
 	    					this.Car.splice(indice, indice+1)
-	    					console.log(this.Car)
 	    					if(this.Car.length<1){
 	    						localStorage.removeItem('carStorage')
 	    					}else{
@@ -240,18 +233,18 @@ export default{
 	    				}
 				})
 			}
+			this.validaCarrito()
 		},	
 		incrementar(Product) {
 		   	this.Car.forEach((elemento, indice, array)=>{
     			if((elemento.ProductoIdProd==Product.ProductoIdProd)&&(elemento.ColoreIdColor==Product.ColoreIdColor)){
-    				console.log(indice)
     				this.Car[indice].Cantidad++
     				this.Car[indice].Subtotal= this.Car[indice].Cantidad* this.Car[indice].Precio
     				if(this.Car[indice].Cantidad>this.Car[indice].Stock){
     					alert('No puedes hacer una compra mayor al stock actual')
 						this.validaStock()
 					}else if(this.Car[indice].Cantidad>20){
-						alert('No puedes hacer una compra mayor a 20 articulos por producto')
+						alert('No puedes hacer una compra mayor a 20 artículos por producto')
 						this.validaCantidades()
 					}
     				if(this.Car.length<1){
@@ -265,13 +258,11 @@ export default{
 		disminuir(Product) {
 		   	this.Car.forEach((elemento, indice, array)=>{
     			if((elemento.ProductoIdProd==Product.ProductoIdProd)&&(elemento.ColoreIdColor==Product.ColoreIdColor)){
-    				console.log(indice)
     				this.Car[indice].Cantidad--
     				this.Car[indice].Subtotal= this.Car[indice].Cantidad* this.Car[indice].Precio
     				if(this.Car[indice].Cantidad<=this.Car[indice].Stock){
 						this.validaCantidades();
 					}
-    				console.log(this.Car)
     				if(this.Car[indice].Cantidad<1){
     					this.deleteProd(this.Car[indice], true)
     				}else{
@@ -290,7 +281,6 @@ export default{
 			this.saleToSend.Total= parseFloat(this.Total)
 			this.saleToSend.ClienteRFC = localStorage.getItem('RFC')
 			if(this.Car.length>0){
-				console.log('Car '+this.Car.length)
 				this.axios.post(GLOBAL.url+'sale', this.saleToSend, {headers: {authorization:localStorage.getItem('token')}})
 		        .then((response) => {
 
@@ -324,9 +314,9 @@ export default{
 				}
 			})
 			if(contador>0){
-				document.getElementById('btnFinalizar').disabled=true
+				this.valPago=false
 			}else{
-				document.getElementById('btnFinalizar').disabled=false
+				this.valPago=true
 			}
 		},
 		validaStock(){
@@ -337,96 +327,22 @@ export default{
 				}
 			})
 			if(contador>0){
-				document.getElementById('btnFinalizar').disabled=true
+				this.valPago=false
 			}else{
-				document.getElementById('btnFinalizar').disabled=false
+				this.valPago=true
+			}	
+		},
+		validaCarrito(){
+			let tam= this.Car.length
+			console.log("tamaño:"+tam)
+			if(tam>0){
+				this.valPago=true
+			}else{
+				this.valPago=false
 			}	
 		}
 	}
 }
-
-
-
-
-paypal.Button.render({
-
-            env: 'sandbox', // sandbox | production
-
-            // PayPal Client IDs - replace with your own
-            // Create a PayPal app: https://developer.paypal.com/developer/applications/create
-            client: {
-               sandbox:    'ATk7GR9gFJL5TgPQgUBPgtgsH8wg3XBXw_Fhivnzk1ShN-coPqt5x_Yyo3zuXGok5rbHgl0ECx0x1Bix',
-                production: '<insert production client id>'
-            },
-
-            // Show the buyer a 'Pay Now' button in the checkout flow
-            commit: true,
-
-            // payment() is called when the button is clicked
-            payment: function(data, actions) {
-
-                // Make a call to the REST api to create the payment
-                return actions.payment.create({
-                    payment: {
-                        transactions: [
-                            {
-                                amount: { total: 487, currency: 'MXN' }
-                            }
-                        ]
-                    }
-                });
-            },
-
-            // onAuthorize() is called when the buyer approves the payment
-            onAuthorize: function(data, actions) {
-
-                // Make a call to the REST api to execute the payment
-                return actions.payment.execute().then(function() {
-                    window.alert("realizada");
-
-				            var doc = new jsPDF({
-				  				orientation: 'p',
-				  				unit: 'pt',
-				  				format: 'a4'});
-							var fecha_actual = new Date()
-
-							var elem = document.getElementById("tableCar");
-							var res = doc.autoTableHtmlToJson(elem);
-							
-							var titulo
-							if(this.generarFactura){
-								titulo='Factura'
-							}else{
-								titulo='Nota de compra'
-							}
-
-							doc.autoTable(res.columns, res.data,{
-							theme: 'striped',
-						    styles: {fillColor: [26, 163, 255]},
-
-						    margin: {top: 100},
-						    addPageContent: function(data) {
-						    	doc.setFontSize(16);
-						    	doc.text(titulo,40, 30);
-						    	doc.text('Venta',40, 40);
-						    	doc.setFontSize(11);
-						    	doc.text('Venta realizada el día: '+fecha_actual ,40, 50)
-						    	doc.text('Costo envio: 100',40, 60)
-						    	doc.text('Subtotal: 420',40, 70)
-						    	doc.text('Iva: 67',40, 80)
-						    	doc.text('Total: 487',40, 90)
-
-
-						    }
-						});
-							doc.save("table.pdf")
-
-				    
-				});
-            }
-
-        }, '#paypal-button-container');
-
 </script>
 <style type="text/css">
 	.box-content{

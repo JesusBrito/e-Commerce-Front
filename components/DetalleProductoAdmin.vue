@@ -37,40 +37,7 @@
 						</div>
 					</div>
 					
-					<div class="field">
-					  <label class="label">Precio</label>
-					  <div class="control">
-					    <input class="input" type="number" step="any" min="1" required="true" placeholder="Precio" v-model="product.Precio">
-					  </div>
-					</div>
-					<div class="columns">
-						<div class="column is-half">
-							<div class="field">
-							  <label class="label">Stock</label>
-							  <div class="control">
-							    <input class="input" type="number" min="0" placeholder="Stock" required="true" v-model="product.Stock" disabled="True">
-							  </div>
-							</div>
-						</div>
-						<div class="column is-half">
-							<div class="columns">
-								<div class="column is-three-fifths">
-									<div class="field">
-									  <label class="label">Agregar stock</label>
-									  <div class="control">
-									    <input class="input" id="nuevoStock" type="number" min="0" placeholder="Stock" v-model="stock.stock">
-									  </div>
-									</div>	
-								</div>
-								<div class="column">
-									<br>
-									<div class="control">
-									    <button class="button is-info is-rounded" @click="addStock">Agregar</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+					
 					
 
 					<div class="field">
@@ -86,21 +53,21 @@
 					</div>
 
 					<div class="field">
-					  <label class="label">Alto</label>
+					  <label class="label">Alto (cm)</label>
 					  <div class="control">
 					    <input class="input" type="number" step="any" min="1" placeholder="Alto" required="true" v-model="product.Alto">
 					  </div>
 					</div>
 
 					<div class="field">
-					  <label class="label">Largo</label>
+					  <label class="label">Largo (cm)</label>
 					  <div class="control">
 					    <input class="input" type="number" step="any" min="1" placeholder="Largo" required="true" v-model="product.Largo">
 					  </div>
 					</div>
 
 					<div class="field">
-					  <label class="label">Ancho</label>
+					  <label class="label">Ancho (cm)</label>
 					  <div class="control">
 					    <input class="input"  type="number" step="any" min="1" placeholder="Ancho" required="true" v-model="product.Ancho">
 					  </div>
@@ -108,7 +75,7 @@
 					<div class="columns">
 						<div class="column is-three-fifths">
 							<div class="field">
-							 <label for="myfile" class="label"> Imágen de producto</label>
+							 <label for="myfile" class="label"> Imagen de producto</label>
 							  <div class="file is-large is-boxed">
 							    <label class="file-label">
 							      <input class="file-input" type="file" @change="onFileSelected" name="myfile" v-validate="'image'">
@@ -160,15 +127,26 @@ export default{
 		return{
 			emailUnique:'',
 			product:{},
-			stock:{}
+			stock:{},
+			colors:{},
+			idProd:''
 		}
 	},
 	created:function(){
-		this.getDataApi()
+		let id= this.$route.params.id_prod
 		var rol= localStorage.getItem('Rol')
 		if(rol=='Client'){
 			router.replace('lista-productos')
 		}
+
+		if(id){
+			localStorage.setItem('productoAdmin',id)
+			this.idProd=id
+		}else{
+			this.idProd=(localStorage.getItem('productoAdmin'))
+		}
+		this.getDataApi()
+		this.getColors()
 	},
 	methods:{
 		editProduct(){
@@ -193,7 +171,7 @@ export default{
          this.formData= formDataa;
       	},
 		getDataApi(){
-			let uri =GLOBAL.url+'producto/'+this.$route.params.id_prod
+			let uri =GLOBAL.url+'producto/'+this.idProd
 			this.axios.get(uri)
 				.then((response)=>{
 					this.product=response.data[0]
@@ -210,11 +188,19 @@ export default{
 
 	        	var input = document.getElementById("nuevoStock");
 				input.value = ''
-				this.stock.stock=''			
+				this.stock.stock=''
+				alert('El stock se actualizó correctamente')			
 	        })
 	        .catch((err)=>{
 	        	alert('Error al agregar el stock ')
 	        })
+		},
+		getColors(){
+			let uri =GLOBAL.url+'color'
+			this.axios.get(uri)
+				.then((response)=>{
+					this.colors=response.data
+				});
 		}
 	}
 }
@@ -223,5 +209,8 @@ export default{
 <style>
 	.box-content{
 		margin-top: 50px;
+	}
+	.stock-section{
+		margin-bottom: 50px;
 	}
 </style>

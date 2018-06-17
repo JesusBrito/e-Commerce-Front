@@ -6,9 +6,9 @@
 				    Ventas realizadas
 				</p>
 				<p class="subtitle has-text-black">
-				  Si deseas visualizar una venta en especifico ingresa el id de la venta en la siguiente caja de texto.
+				  Si deseas visualizar una venta en específico ingresa el id de la venta en la siguiente caja de texto.
 				  <br>
-				  Da click sobre el No de venta para conocer sus detalles  
+				  Da click sobre el No. de venta para conocer sus detalles  
 				</p>
 			</div>
 		</section>
@@ -106,7 +106,7 @@ export default{
 	created:function(){
 		this.getDataApi()
 		var rol= localStorage.getItem('Rol')
-		if(this.Rol){
+		if(rol){
 			if(rol=='Client'){
 				router.replace('lista-productos')
 			}

@@ -13,7 +13,7 @@
 					<form v-on:submit.prevent="loginUser">
 						<div class="correo">
 						  <p class="control has-icons-left has-icons-right">
-						    <input class="input" type="text" placeholder="RFC" required pattern="^([A-ZÑ a-zñ\x26]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])([A-Z]|[0-9]){2}([A]|[0-9]){1})?$" title="El Rfc no tiene el formato correcto" v-model="userToLogued.Rfc">
+						    <input class="input" type="text" placeholder="RFC" required pattern="^([A-ZÑ a-zñ\x26]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])([A-Z a-z]|[0-9]){2}([A]|[0-9]){1})?$" title="El Rfc no tiene el formato correcto" v-model="userToLogued.Rfc">
 						    <span class="icon is-small is-left">
 						      <i class="fas fa-user"></i>
 						    </span>

@@ -17,9 +17,9 @@
 				<form v-on:submit.prevent="addProduct" id="registerForm">	
 
 					<div class="field">
-					  <label class="label">Id  de producto</label>
+					  <label class="label">Id  de producto (1 letra mayuscula seguido de 2 o más números)</label>
 					  <div class="control">
-					    <input class="input" type="text" v-on:keyup="validateId" placeholder="Id de producto" required="true" v-model="product.Id_prod" pattern="([A-ZÑa-zñ0-9]){3,}">
+					    <input class="input" type="text" v-on:keyup="validateId" placeholder="Id de producto" required="true" maxlength="6" v-model="product.Id_prod" pattern="^([A-Z\x26]{1}([0-9]{2,}))?$">
 					    <span v-show="this.idNotUnique" class="help is-danger">El id ya está registrado</span>
 					  </div>
 					</div>
@@ -27,30 +27,24 @@
 					<div class="field">
 					  <label class="label">Nombre</label>
 					  <div class="control">
-					    <input class="input" type="text" placeholder="Nombre" pattern="[a-zA-Z0-9À-ž\s]*" required="true" v-model="product.Nombre">
+					    <input class="input" type="text" placeholder="Nombre" pattern="[a-zA-ZÀ-ž\s]*" required="true" v-model="product.Nombre">
 					  </div>
 					</div>
 			
 					<div class="field">
 						<label class="label">Descripción</label>
 						<div class="control">
-							<textarea class="textarea" id="txtDescripcion" placeholder="Descripción" required="true" v-model="product.Descripcion"></textarea>
+							<textarea class="textarea" v-validate="'alpha_spaces'" maxlength="80" name="descripcion" id="txtDescripcion" placeholder="Descripción" required="true" v-model="product.Descripcion"></textarea>
 						</div>
 					</div>
-					
-					<div class="field">
-					  <label class="label">Precio</label>
-					  <div class="control">
-					    <input class="input" type="number" step="any" min="1" required="true" placeholder="Precio" v-model="product.Precio">
-					  </div>
-					</div>
 
-					<div class="field">
-					  <label class="label">Stock</label>
-					  <div class="control">
-					    <input class="input" type="number" min="0" placeholder="Stock" required="true" v-model="product.Stock">
-					  </div>
+					<div class="help is-danger" v-show="errors.any()">
+					    <div v-show="errors.has('descripcion')">
+					      {{ errors.first('descripcion') }}
+					    </div>
 					</div>
+					
+					
 
 					<div class="field">
 					  <label class="label">Estatus</label>
@@ -64,33 +58,33 @@
 					  </div>
 					</div>
 					<div class="field">
-					  <label class="label">Categoria</label>
+					  <label class="label">Categoría</label>
 					  <div class="control">
 					    <div class="select">
 					      <select required="true" v-model="product.CategoriaIdCategoria">
-					        <option v-for="category in categories" >{{category.Id_Categoria}}</option>
+					        <option v-for="category in categories" :value="category.Id_Categoria">{{category.Nombre_Categoria}}</option>
 					      </select>
 					    </div>
 					  </div>
 					</div>
 					<div class="field">
-					  <label class="label">Alto</label>
+					  <label class="label">Alto (cm)</label>
 					  <div class="control">
-					    <input class="input" type="number" step="any" min="1" placeholder="Alto" required="true" v-model="product.Alto">
+					    <input class="input" type="number" max="100" step="any" min="1" placeholder="Alto" required="true" v-model="product.Alto">
 					  </div>
 					</div>
 
 					<div class="field">
-					  <label class="label">Largo</label>
+					  <label class="label">Largo (cm)</label>
 					  <div class="control">
-					    <input class="input" type="number" step="any" min="1" placeholder="Largo" required="true" v-model="product.Largo">
+					    <input class="input" type="number" max="100" step="any" min="1" placeholder="Largo" required="true" v-model="product.Largo">
 					  </div>
 					</div>
 
 					<div class="field">
-					  <label class="label">Ancho</label>
+					  <label class="label">Ancho (cm)</label>
 					  <div class="control">
-					    <input class="input"  type="number" step="any" min="1" placeholder="Ancho" required="true" v-model="product.Ancho">
+					    <input class="input"  type="number" step="any" max="100" min="1" placeholder="Ancho" required="true" v-model="product.Ancho">
 					  </div>
 					</div>
 					
@@ -98,13 +92,13 @@
 					 <label for="myfile" class="label"> Imágen de producto</label>
 					  <div class="file is-large is-boxed">
 					    <label class="file-label">
-					      <input class="file-input" type="file" @change="onFileSelected" name="myfile" v-validate="'image'">
+					      <input class="file-input" required="true" type="file" @change="onFileSelected" name="myfile" v-validate="'image'">
 					      <span class="file-cta">
 					        <span class="file-icon">
 					          <i class="fas fa-upload"></i>
 					        </span>
 					        <span class="file-label">
-					          Selecciona una imágen
+					          Selecciona una imagen
 					        </span>
 					      </span>
 					      <span class="help is-danger">{{ errors.first('myfile') }}</span>
@@ -156,6 +150,16 @@ export default{
 		}
 	},
 	methods:{
+		validateBeforeSubmit() {
+	      this.$validator.validateAll().then((response)=>{
+	          if(response){
+	          	alert('Datos llenados correctamente')
+	          	this.addProduct()
+	          }else{
+	          	alert('Verifique que los campos de hayan llenado correctamente')
+	          }
+	        })
+	    },
 		addProduct(){
 	        this.axios.post(GLOBAL.url+'producto', this.product, {headers: {authorization:localStorage.getItem('token')}})
 	        .then((response) => {

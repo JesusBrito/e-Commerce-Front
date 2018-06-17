@@ -40,7 +40,7 @@
 							  </p>
 							  <p class="control">
 
-							    <input class="input" type="text" placeholder="Amount of money" readonly="true" v-model="product.Precio">
+							    <input class="input" type="text" placeholder="Amount of money" readonly="true" v-model="almacen.Colore">
 							  </p>
 							  <p class="control">
 							    <p class="button">
@@ -53,7 +53,7 @@
 							<div class="field">
 								<label class="label is-size-6">Cantidad</label>
 								<div class="control">
-									<input class="input" type="number" min="1" max="20" title="Ingresa un valor entero"> placeholder="Número" required="true" v-model="cantidad" @change="valStock" @keyup="valStock" title="Ingresa un valor entero">
+									<input class="input" type="number" min="1" max="20" title="Ingresa un valor entero" placeholder="Número" required="true" v-model="cantidad" @change="valStock" @keyup="valStock" >
 								</div>
 							</div>
 							<div class="field">
@@ -104,7 +104,6 @@ export default{
 				router.replace('productos')
 			}
 			this.estado= localStorage.getItem('Estado')
-			console.log(this.estado)
 		}
 
 		if(id){
@@ -128,7 +127,6 @@ export default{
 			var contador=0
 			if(this.estado == 'CDMX'||this.estado == 'México'||this.estado == 'Puebla'||this.estado == 'Morelos'){
 				var storeStored=(localStorage.getItem('carStorage'))
-				console.log('Store: '+storeStored)
 
 				var color
 
@@ -139,13 +137,9 @@ export default{
 				})
 
 				if(storeStored){
-					console.log('Entró')
 					var store= JSON.parse(storeStored)
-					console.log(store)
 
 					store.forEach((elemento, indice, array)=>{
-						console.log('Elemento Carrito'+elemento.ProductoIdProd+' Indice'+indice)
-						console.log('Elemento'+this.product.ProductoIdProd)
 		    			if(elemento.ProductoIdProd==this.product.Id_prod){
 		    				if(elemento.ColoreIdColor==this.product.Color){
 		    					contador++
@@ -156,13 +150,11 @@ export default{
 		    					}else{    						
 			    					elemento.Cantidad= parseInt(elemento.Cantidad)+ parseInt(this.cantidad)
 			    					elemento.Subtotal=parseFloat(elemento.Precio)* parseFloat(elemento.Cantidad)
-			    					console.log(elemento.Subtotal)
 			    					localStorage.setItem('carStorage',  JSON.stringify(store))
 			    					alert('El producto ya se encuentra en el carrito y se ha actualizado')
 		    					}
 		    				}
 		    			}
-		    			console.log('Contador: '+contador)
 					})
 					if(contador<1){
 		    				store.push({
@@ -176,7 +168,7 @@ export default{
 			    						Stock:this.product.Stock
 			    						})
 								localStorage.setItem('carStorage', JSON.stringify(store))
-								alert('El producto se agregó correctamente al carrito {else interno}')
+								alert('El producto se agregó correctamente al carrito')
 		    				}
 				}else{
 					var store =[]
@@ -191,12 +183,9 @@ export default{
 								Stock:this.product.Stock
 								})
 					localStorage.setItem('carStorage', JSON.stringify(store))
-					alert('El producto se agregó correctamente al carrito {else principal}')
+					alert('El producto se agregó correctamente al carrito')
 				}
 				this.cantidad=''
-
-
-
 			}else{
 
 				alert('No se puede agregar el producto al carrito ya que no te encuentras dentro del área metropolitana')
@@ -221,7 +210,6 @@ export default{
 			this.axios.get(uri)
 				.then((response)=>{
 					this.colors=response.data
-					console.log(this.colors)
 				});
 		}
 	}

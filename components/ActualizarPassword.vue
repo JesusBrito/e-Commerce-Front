@@ -21,7 +21,7 @@
 					  </div>
 					</div>
 					<div class="field">
-					  <label class="label">Contraseña nueva <span class="has-text-danger has-text-weight-bold" >*</span><span class="has-text-weight-normal"> Debe contener por lo menos una mayuscula, una minuscula, un numero, un cáracter especíal y de una extención de 8 digitos mínimo y 20 máximo</span></label>
+					  <label class="label">Contraseña nueva <span class="has-text-danger has-text-weight-bold" >*</span><span class="has-text-weight-normal"> Debe contener por lo menos una mayúscula, una minúscula, un número, un cáracter especial y de una extensión de 8 dígitos mínimo y 20 máximo</span></label>
 					  <div class="control">
 					    <input class="input" type="password" placeholder="Contraseña nueva" name="password" required="true" pattern="(?=^.{8,20}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" title="La contraseña no tiene la estructura adecuada"  v-model="cliente.Password">
 					  </div>

@@ -6,7 +6,7 @@
 				    Clientes
 				</p>
 				<p class="subtitle has-text-black">
-				  Si deseas visualizar un cliente en especifico ingresa su RFC en la siguiente caja de texto. 
+				  Si deseas visualizar un cliente en específico ingresa su RFC en la siguiente caja de texto. 
 				</p>
 			</div>
 		</section>
@@ -44,7 +44,7 @@
 			      <th><abbr title="RFC">RFC</abbr></th>
 			      <th><abbr title="Nombre">Nombre</abbr></th>
 			      <th><abbr title="Direccion">Dirección</abbr></th>
-			      <th><abbr title="Telefono">Telefono</abbr></th>
+			      <th><abbr title="Telefono">Teléfono</abbr></th>
 			    </tr>
 			  </thead>
 				
@@ -78,7 +78,7 @@ export default{
 	created:function(){
 		this.getDataApi()
 		var rol= localStorage.getItem('Rol')
-		if(this.Rol){
+		if(rol){
 			if(rol=='Client'){
 				router.replace('lista-productos')
 			}
@@ -94,6 +94,10 @@ export default{
 				.then((response)=>{
 					this.clients=''						
 					this.clients=response.data
+
+					if(this.clients==''){
+						alert('No hay un cliente con ese RFC')						
+					}
 				});
 		}
 	}

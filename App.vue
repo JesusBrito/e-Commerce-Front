@@ -103,7 +103,7 @@
             <p class="control">
               <router-link :to="{ name: 'RegistrarCliente'}" 
                 class="bd-tw-button button" v-if="!authenticated">
-                  Registrate
+                  Regístrate
               </router-link>
             </p>
             <p class="control">

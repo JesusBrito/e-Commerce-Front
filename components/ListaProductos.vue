@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-if='cargado'>
 		<section class="box-content hero is-primary hero-titulo">
 		  <div class="hero-body">
 		    <p class="title has-text-black">
@@ -66,6 +66,11 @@
 			</div>				
 		</div>
 	</div>
+	<div v-else>
+		<div class="spinner">
+		    <img src="../assets/loading.svg" alt="loading"/>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -75,7 +80,8 @@ export default{
 	data(){
 		return{
 			products:{},
-			nombre:''
+			nombre:'',
+			cargado:''
 		}
 	},
 	created:function(){
@@ -91,10 +97,13 @@ export default{
 			this.axios.get(GLOBAL.url+'producto-client/'+this.nombre)
 				.then((response)=>{
 					this.products=response.data
+					this.cargado=false
 					if(this.products==''){
-						alert('No existen productos con un nombre similar')						
+						alert('No existen productos con un nombre similar')
+
 					}
-				});
+					this.cargado=true
+				})
 		}
 	}
 }
@@ -104,4 +113,16 @@ export default{
 	.box-content{
 		margin-top: 50px;
 	}
+	.spinner {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: white;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
 </style>

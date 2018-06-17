@@ -17,7 +17,7 @@
 					<div class="field">
 					  <label class="label">RFC <span class="has-text-danger has-text-weight-bold">*</span></label>
 					  <div class="control">
-					    <input class="input" type="text" placeholder="RFC" maxlength="14" required="true" v-model="cliente.RFC" @keyup="verificarRfc" pattern="^([A-ZÑ a-zñ\x26]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])([A-Z a-z]|[0-9]){2}([A]|[0-9]){1})?$" title="El Rfc debe tener un formato valido">
+					    <input class="input" type="text" placeholder="RFC" maxlength="14" required="true" v-model="cliente.RFC" @keyup="verificarRfc" pattern="^([A-ZÑ a-zñ\x26]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])([A-Z a-z]|[0-9]){2}([A]|[0-9]){1})?$" title="El Rfc debe tener un formato válido">
 					    <span v-show="this.rfcUnique" class="help is-danger">El RFC ya está registrado</span>
 					  </div>
 					</div>
@@ -25,7 +25,7 @@
 					<div class="field">
 					  <label class="label">Nombre <span class="has-text-danger has-text-weight-bold">*</span></label>
 					  <div class="control">
-					    <input class="input" maxlength="30" type="text" placeholder="Nombre" pattern="[a-zñA-ZÑ À-ž\s]*" title="El nombre debe ser de tipo texto sin caracteres especiales" required="true" v-model="cliente.Nombre">
+					    <input class="input" maxlength="30" type="text" placeholder="Nombre" pattern="[a-zñA-ZÑ À-ž\s]*" title="El nombre debe ser de tipo texto sin caracteres especiales ni numéricos" required="true" v-model="cliente.Nombre">
 					  </div>
 					</div>
 					
@@ -60,7 +60,7 @@
 					<div class="field">
 					  <label class="label">Número <span class="has-text-danger has-text-weight-bold">*</span></label>
 					  <div class="control">
-					    <input class="input" type="text" minlength="1"  maxlength="5" pattern="[0-9]{*,5}" placeholder="Número" required="true" title="El numero es de tipo numerico" v-model="cliente.Numero">
+					    <input class="input" type="number" minlength="1"  maxlength="5" pattern="[0-9]" placeholder="Número" required="true" title="Debe ser tipo numérico" v-model="cliente.Numero">
 					  </div>
 					</div>
 
@@ -123,7 +123,7 @@
 					</div>
 					
 					<div class="field">
-					  <label class="label">Telefono <span class="has-text-danger has-text-weight-bold">*</span></label>
+					  <label class="label">Teléfono (12 números) <span class="has-text-danger has-text-weight-bold">*</span></label>
 					    <input class="input" type="tel" maxlength="12" placeholder="Telefono" required="true" v-model="cliente.Telefono">
 					</div>
 
@@ -139,7 +139,7 @@
 					    </div>
 					</div>
 					<div class="field">
-					  <label class="label">Contraseña <span class="has-text-danger has-text-weight-bold">*</span> <span class="has-text-weight-normal"> Debe contener por lo menos una mayuscula, una minuscula, un numero, un cáracter especíal y de una extención de 8 digitos mínimo y 20 máximo</span></label>
+					  <label class="label">Contraseña <span class="has-text-danger has-text-weight-bold">*</span> <span class="has-text-weight-normal"> Debe contener por lo menos una mayúscula, una minúscula, un número, un cáracter especial y de una extensión de 8 dígitos mínimo y 20 máximo</span></label>
 					  <div class="control">
 					    <input class="input" type="password" placeholder="Contraseña" name="password" required="true" pattern="(?=^.{8,20}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" title="La contraseña no tiene la estructura adecuada"  v-model="cliente.Password">
 					  </div>

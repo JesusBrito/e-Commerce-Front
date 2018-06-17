@@ -6,9 +6,9 @@
 			    Compras realizadas
 			</p>
 			<p class="subtitle has-text-black">
-			  Si deseas visualizar una compra en especifico ingresa el id de la compra en la siguiente caja de texto.
+			  Si deseas visualizar una compra en específico ingresa el id de la compra en la siguiente caja de texto.
 			  <br>
-			  Da click sobre el No de compra para conocer sus detalles  
+			  Da click sobre el No de compra para conocer sus detalles. 
 			</p>
 		</div>
 	</section>
@@ -22,7 +22,7 @@
 					<div class="field-body">
 					    <div class="field">
 						    <p class="control is-expanded has-icons-right">
-						        <input class="input" type="number" step="any" placeholder="No de compra" v-model='idVenta' @keyup='searchById'@change='searchById'>
+						        <input class="input" type="number" step="any" placeholder="No de compra" min="1" v-model='idVenta' @keyup='searchById'@change='searchById'>
 								<span class="icon is-small is-right">
 							    	<i class="fas fa-search"></i>
 								</span>
@@ -99,8 +99,9 @@ export default{
 				})
 		},
 		searchById(){
+			let rfc= localStorage.getItem('RFC')
 			if(this.idVenta){
-				this.axios.get(GLOBAL.url+'sale-no-venta/'+this.idVenta,{headers: {authorization:localStorage.getItem('token')}})
+				this.axios.get(GLOBAL.url+'sale-no-venta/'+rfc+'/'+this.idVenta,{headers: {authorization:localStorage.getItem('token')}})
 					.then((response)=>{
 						//this.sales=''			
 						this.sales=response.data

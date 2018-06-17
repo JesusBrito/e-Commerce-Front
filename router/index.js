@@ -17,11 +17,13 @@ import ProductosCategoria from '@/components/ProductosCategoria'
 import ActualizarPassword from '@/components/ActualizarPassword'
 import RecuperarPassword from '@/components/RecuperarPassword'
 import VisualizarComprasCliente from '@/components/VisualizarComprasCliente'
+import ActualizarStock from '@/components/ActualizarStock'
+import RegistrarAlmacen from '@/components/RegistrarAlmacen'
+
 
 Vue.use(Router)
 
 const router = new Router({
-  mode: 'history',
   routes: [
     {
       path: '/datos-personales',
@@ -111,6 +113,16 @@ const router = new Router({
       path:'/visualizar-compras',
       name:'VisualizarComprasCliente',
       component: VisualizarComprasCliente
+    },
+    {
+      path:'/actualiza-stock',
+      name:'ActualizarStock',
+      component: ActualizarStock
+    },
+    {
+      path:'/registrar-almacen',
+      name:'RegistrarAlmacen',
+      component: RegistrarAlmacen
     }
   ]
 })
