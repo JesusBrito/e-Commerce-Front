@@ -123,7 +123,7 @@
 					</div>
 					
 					<div class="field">
-					  <label class="label">Teléfono (12 números) <span class="has-text-danger has-text-weight-bold">*</span></label>
+					  <label class="label">Telefono (12 números) <span class="has-text-danger has-text-weight-bold">*</span></label>
 					    <input class="input" type="tel" maxlength="12" placeholder="Telefono" required="true" v-model="cliente.Telefono">
 					</div>
 

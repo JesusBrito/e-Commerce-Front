@@ -155,17 +155,11 @@
 						
 						<tbody>
 					    <tr v-for= "saleDetail in sale.Detalle_Venta">
-					      <td>{{saleDetail.Id_Detalle}}</td>
+					      <td>{{saleDetail.Almacen_Color.ProductoIdProd}}</td>
 
-					      <td v-for="(itemInSaleDetail, key, index ) in saleDetail"  
-					      	v-if="key=='Producto'" >
-					      	{{itemInSaleDetail.Nombre}}
-					      </td>
+					      <td>{{saleDetail.Almacen_Color.Producto.Nombre}}</td>
 
-					      <td v-for="(itemInSaleDetail, key, index ) in saleDetail" 
-					      	v-if="key=='Colore'" >
-					     	{{itemInSaleDetail.Nombre_Color}}
-					      </td>
+					      <td >{{saleDetail.Almacen_Color.Colore.Nombre_Color}}</td>
 
 					      <td>
 					      	{{saleDetail.Cantidad}}
@@ -215,10 +209,6 @@ export default{
 		var estatus=document.getElementById("cbEstatus")
 		var rastreo=document.getElementById("txtNoRastreo")
 		if(this.Rol){
-			if(rol==='Admin'){
-				estatus.disabled=true
-				rastreo.disable=true
-			}
 		}else{
 			alert('Aún no inicias sesión')
 			router.replace('login')

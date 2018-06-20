@@ -100,7 +100,7 @@ export default{
 			bucarFecha:false,
 			bucarId:false,
 			dates:{},
-			sales:{}
+			sales:{},
 		}
 	},
 	created:function(){
@@ -121,6 +121,7 @@ export default{
 				.then((response)=>{
 					this.sales=''				
 					this.sales=response.data
+					console.log(this.sales)
 				})
 				.catch((err)=>{
 					alert('Error:'+ err)

@@ -50,7 +50,6 @@
 				      Resumen de pedido 
 				    </p>
 				    <p>
-				    	<countdown :date="date"></countdown>
 				    </p>
 				  </header>
 				  <div class="card-content">
@@ -152,11 +151,34 @@ export default{
 			router.replace('login')
 		}
 		this.validaCarrito()
-		
-		var calcDate= newDate() 
-		this.date = calcDate.setMinutes(calcDate.getMinutes()+5)
-		alert(this.date)
+		console.log(this.Car)
 	},
+    computed : {
+	    subTotal: function() {
+	      	let sum = 0
+	      	var subtotal= this.Car.reduce((sum, item) => sum + parseFloat(item.Subtotal), 0)
+	      	this.Subtotal= subtotal.toFixed(2)
+	      	return subtotal
+	    },
+	  	iva: function() {
+	  		var iva=0
+	  		iva = this.Subtotal*.16
+	  		this.Iva= iva.toFixed(2)
+	      	return this.Iva	
+	    },
+	  	costo: function() {
+	  		var costo=0
+	  		costo= this.Subtotal*.20
+	  		this.Costo=costo.toFixed(2)
+	      	return this.Costo
+	    },
+	  	total: function() {
+	  		var total=0
+	  		total= (this.Subtotal*1.16)+ parseFloat(this.Costo)
+	  		this.Total=total.toFixed(2)
+	      	return this.Total
+	    }
+  	},
 	methods:{
 		generatePdf(){
 			var doc = new jsPDF({
@@ -280,6 +302,7 @@ export default{
 			this.saleToSend.Iva= parseFloat(this.Iva)
 			this.saleToSend.Total= parseFloat(this.Total)
 			this.saleToSend.ClienteRFC = localStorage.getItem('RFC')
+
 			if(this.Car.length>0){
 				this.axios.post(GLOBAL.url+'sale', this.saleToSend, {headers: {authorization:localStorage.getItem('token')}})
 		        .then((response) => {

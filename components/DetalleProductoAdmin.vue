@@ -74,23 +74,27 @@
 					</div>
 					<div class="columns">
 						<div class="column is-three-fifths">
-							<div class="field">
+
+							
 							 <label for="myfile" class="label"> Imagen de producto</label>
-							  <div class="file is-large is-boxed">
+							  <div class="file is-medium has-name is-boxed is-dark">
 							    <label class="file-label">
 							      <input class="file-input" type="file" @change="onFileSelected" name="myfile" v-validate="'image'">
 							      <span class="file-cta">
 							        <span class="file-icon">
-							          <i class="fas fa-upload"></i>
+							          <i class="fas fa-cloud-upload-alt"></i>
 							        </span>
 							        <span class="file-label">
-							          Selecciona una imágen
+							          Carga imagen
 							        </span>
 							      </span>
+							      	<span class="file-name" id="filename">
+        					
+      								</span>
 							      <span class="help is-danger">{{ errors.first('myfile') }}</span>
 							    </label>
 							  </div>
-							</div>
+							
 
 							<div class="field is-grouped">
 							  <div class="control" >
@@ -165,10 +169,11 @@ export default{
         })
 		},
 		onFileSelected (event) {
-         const file = event.target.files[0];
-         const formDataa = new FormData();
-         formDataa.append("Str_img", file);
-         this.formData= formDataa;
+         	const file = event.target.files[0];
+         	const formDataa = new FormData();
+         	formDataa.append("Str_img", file);
+         	this.formData= formDataa;
+         	document.getElementById('filename').innerHTML = file.name
       	},
 		getDataApi(){
 			let uri =GLOBAL.url+'producto/'+this.idProd

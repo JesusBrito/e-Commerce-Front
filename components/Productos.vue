@@ -8,7 +8,7 @@
 				<p class="subtitle has-text-black">
 				  Si deseas visualizar un producto en específico ingresa el id en la siguiente caja de texto.
 				  <br>
-				  Da click sobre el nombre del producto para conocer sus detalles o modificarlo.
+				  Da click sobre algún botón para visualizar más opciones
 				</p>
 			</div>
 		</section>
@@ -71,7 +71,7 @@
 			      		Actualizar stock
 	      			</router-link>
 	      			<router-link class="button is-success"  :to="{ name: 'RegistrarAlmacen', params: {id_prod: product.Id_prod , nombre: product.Nombre}}">
-			      		Registar Almacen
+			      		Registrar almacén
 	      			</router-link>
 			      </td>
 			    </tr>

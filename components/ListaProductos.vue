@@ -55,7 +55,6 @@
 							</div>
 							<div class="content">
 							   <p>{{product.Descripcion}}</p>
-							   <p>$ {{product.Precio}}</p>
 							   <router-link :to="{ name: 'DetalleProducto', params: {id_prod: product.Id_prod}}" class="button is-info is-rounded">
 					              Ver detalles
 					            </router-link>

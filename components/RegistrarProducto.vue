@@ -17,7 +17,7 @@
 				<form v-on:submit.prevent="addProduct" id="registerForm">	
 
 					<div class="field">
-					  <label class="label">Id  de producto (1 letra mayuscula seguido de 2 o más números)</label>
+					  <label class="label">Id  de producto (1 letra mayúscula seguido de 2 o más números)</label>
 					  <div class="control">
 					    <input class="input" type="text" v-on:keyup="validateId" placeholder="Id de producto" required="true" maxlength="6" v-model="product.Id_prod" pattern="^([A-Z\x26]{1}([0-9]{2,}))?$">
 					    <span v-show="this.idNotUnique" class="help is-danger">El id ya está registrado</span>
@@ -61,9 +61,17 @@
 					  <label class="label">Categoría</label>
 					  <div class="control">
 					    <div class="select">
+
+
 					      <select required="true" v-model="product.CategoriaIdCategoria">
-					        <option v-for="category in categories" :value="category.Id_Categoria">{{category.Nombre_Categoria}}</option>
+					        <option v-for="category in categories" :value="category.Id_Categoria"> 
+					        	{{category.Nombre_Categoria}}
+					    	</option>
 					      </select>
+							{{product.CategoriaIdCategoria}}
+
+
+
 					    </div>
 					  </div>
 					</div>
@@ -88,24 +96,25 @@
 					  </div>
 					</div>
 					
-					<div class="field">
-					 <label for="myfile" class="label"> Imágen de producto</label>
-					  <div class="file is-large is-boxed">
-					    <label class="file-label">
-					      <input class="file-input" required="true" type="file" @change="onFileSelected" name="myfile" v-validate="'image'">
-					      <span class="file-cta">
-					        <span class="file-icon">
-					          <i class="fas fa-upload"></i>
-					        </span>
-					        <span class="file-label">
-					          Selecciona una imagen
-					        </span>
-					      </span>
-					      <span class="help is-danger">{{ errors.first('myfile') }}</span>
-					    </label>
-					  </div>
-					</div>
-		
+							<label for="myfile" class="label"> Imagen de producto</label>
+							  <div class="file is-medium has-name is-boxed is-dark">
+							    <label class="file-label">
+							      <input class="file-input" type="file" @change="onFileSelected" name="myfile" v-validate="'image'">
+							      <span class="file-cta">
+							        <span class="file-icon">
+							          <i class="fas fa-cloud-upload-alt"></i>
+							        </span>
+							        <span class="file-label">
+							          Carga imagen
+							        </span>
+							      </span>
+							      	<span class="file-name" id="filename">
+        					
+      								</span>
+							      <span class="help is-danger">{{ errors.first('myfile') }}</span>
+							    </label>
+							  </div>
+					
 					<div class="field is-grouped">
 					  <div class="control" >
 					    <button class="button is-primary" id="btn-agregar">Registrar</button>
@@ -182,10 +191,12 @@ export default{
 	        })
 		},
 		onFileSelected (event) {
-         const file = event.target.files[0];
-         const formDataa = new FormData();
-         formDataa.append("Str_img", file);
-         this.formData= formDataa;
+         	const file = event.target.files[0];
+         	const formDataa = new FormData();
+         	formDataa.append("Str_img", file);
+         	this.formData= formDataa;
+      
+			document.getElementById('filename').innerHTML = file.name
       },
       clear(){
       	var inputs = document.getElementsByTagName("input");

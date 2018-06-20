@@ -3,7 +3,7 @@
 		<section class="box-content hero is-primary hero-titulo">
 			<div class="hero-body">
 			    <p class="title has-text-black">
-				    Dátos personales
+				    Datos personales
 				</p>
 				<p class="subtitle has-text-black">
 				    
@@ -125,7 +125,7 @@
 					</div>
 					
 					<div class="field">
-					  <label class="label">Telefono <span class="has-text-danger has-text-weight-bold">*</span></label>
+					  <label class="label">Teléfono <span class="has-text-danger has-text-weight-bold">*</span></label>
 					    <input class="input" type="num" minlength="8" maxlength="10" placeholder="Telefono" required="true" v-model="cliente.Telefono">
 					</div>
 
